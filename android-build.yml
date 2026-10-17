@@ -1,4 +1,5 @@
 
+
 name: Build CBN 24 APK
 
 on:
@@ -12,6 +13,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,17 +25,13 @@ jobs:
           java-version: '17'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          accept-android-sdk-licenses: false
-
-      
-      - name: Accept Android SDK licenses
-        run: yes | sdkmanager --licenses
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
+          yes | sdkmanager --licenses
 
       - name: Install Android SDK packages
         run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
-        
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -48,4 +46,4 @@ jobs:
           name: CBN24-News-Post-Maker-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-          
+
